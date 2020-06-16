@@ -1,0 +1,16 @@
+{{#if error}}
+<div class="callout" data-closable>
+  <button class="close-button" aria-label="Close alert" type="button" data-close>
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <p>{{error}}</p>
+</div>
+{{/if}}
+{{#if error_msg}}
+<div class="callout" data-closable>
+  <button class="close-button" aria-label="Close alert" type="button" data-close>
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <p>{{error_msg}}</p>
+</div>
+{{/if}}
