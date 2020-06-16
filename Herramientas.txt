@@ -1,0 +1,3 @@
+npm init -y
+npm i express connect-flash express-handlebars method-override mongoose 
+npm install dotenv nodemon -D
