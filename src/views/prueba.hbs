@@ -1,0 +1,31 @@
+<div class="grid-container">
+    <h1>prueba</h1>
+    <div class="grid-x grid-padding-x">
+        <form data-abide novalidate action='/prueba' method="POST">
+            <div class="grid-x grid-margin-x align-bottom">
+                <div class="cell small-6">
+                    <h2>Preguntas:</h2>
+                </div>
+                {{#each p}}
+                {{#if @firts}}
+                hola
+                {{/if}}
+                <div class="cell small-12">
+                    {{@index}}){{question}}
+                </div>
+                <fieldset>
+                    <legend>Respuestas</legend>
+                    {{#each answers}}
+                    <div class="cell small-12">
+                        <input type="radio" name="{{../this.question}}" value="{{this}}" id="{{this}}" required><label for="{{this}}">{{this}}</label>
+                    </div>
+                    {{/each}}
+                </fieldset>
+                {{/each}}
+                <div class="cell large-4">
+                    <button class="button" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
