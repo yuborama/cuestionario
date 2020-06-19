@@ -2,27 +2,27 @@
     <h1>prueba</h1>
     <div class="grid-x grid-padding-x">
         <form data-abide novalidate action='/prueba' method="POST">
-            <div class="grid-x grid-margin-x align-bottom">
-                <div class="cell small-6">
+            
+            <input type="hidden" name="id_prueba" value="{{idNc}}">
+            <div class="grid-x grid-margin-x align-bottom ">
+                <div class="cell small-12">
                     <h2>Preguntas:</h2>
                 </div>
                 {{#each p}}
-                {{#if @firts}}
-                hola
-                {{/if}}
                 <div class="cell small-12">
-                    {{@index}}){{question}}
+                    {{nombre}}
                 </div>
                 <fieldset>
                     <legend>Respuestas</legend>
-                    {{#each answers}}
+                    {{#each respuestas}}
                     <div class="cell small-12">
-                        <input type="radio" name="{{../this.question}}" value="{{this}}" id="{{this}}" required><label for="{{this}}">{{this}}</label>
+                        <input type="radio" name="{{../this._id}}" value="{{this}}" id="{{this}}" required><label
+                            for="{{this}}">{{this}}</label>
                     </div>
                     {{/each}}
                 </fieldset>
                 {{/each}}
-                <div class="cell large-4">
+                <div class="cell small-12">
                     <button class="button" type="submit">Submit</button>
                 </div>
             </div>

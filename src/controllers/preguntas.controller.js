@@ -1,66 +1,109 @@
 const pregctrl = {};
 const Preg = require('../models/preguntas');
-const Resp = require('../models/respuestas');
-const respuestas = require('../models/respuestas');
+const Resut = require('../models/resultado');
+const preguntas = require('../models/preguntas');
 
-pregctrl.nuevapregunta = async (req, res) => {
-    nombre = '¿QUE ES UN ALGORITMO?'
-    res1 = 'Es un proceso de ejecuciones'
-    res2 = 'Es una serie de ejecuciones detalladas que no sirven para ejecutar procesos'
-    res3 = 'Es una serie de operaciones detalladas y no ambiguas para ejecutar paso a paso que conducen a la resolución de un problema'
-    const respuesta1 = Resp({ nombre: res1 })
-    const respuesta2 = Resp({ nombre: res2 })
-    const respuesta3 = Resp({ nombre: res3 })
-    await respuesta1.save()
-    await respuesta2.save()
-    await respuesta3.save()
-    acertada = respuesta3._id
-    const respuestas = [respuesta1._id, respuesta2._id, respuesta3._id,];
-    const NewResp = Preg({ nombre, acertada, respuestas })
-    const preguntag = await NewResp.save();
-    const preg_resp = await Preg.find({ _id: preguntag._id }).populate({ path: 'respuestas' }).populate({ path: 'acertada', select: 'nombre' }).lean();
-    console.log(preg_resp);
-    res.send('logrado')
-}
-
-pregctrl.guardar = async (req, res) => {
- console.log(req.body);
- res.send('respuesta')
- 
-}
-pregctrl.revolverNP = async (req, res) => {
+pregctrl.llenarbase = async (req, res) => {
     const a = [
         {
-            "question": "¿Quien descubrió América?",
-            "answers": ["Colón", "Yo mismo", "Tú"]
+            "nombre": '¿QUE ES UN ALGORITMO?',
+            "puntaje": 30,
+            "acertada": 'Es una serie de operaciones detalladas y no ambiguas para ejecutar paso a paso que conducen a la resolución de un problema',
+            "respuestas": ['Es una serie de ejecuciones detalladas que no sirven para ejecutar procesos', 'Es un proceso de ejecuciones']
+        }, {
+            "nombre": 'MEDIANTE QUE SE REPRESENTA UN ALGORITMO',
+            "puntaje": 30,
+            "acertada": 'Mediante una herramienta o técnica',
+            "respuestas": ['Mediante ejecución', 'Mediante un papel', 'Mediante procesos algebraicos']
+        }, {
+            "nombre": 'EL ALGORITMO SE TRANSFORMA EN UN PROGRAMA DE COMPUTADORA?',
+            "puntaje": 30,
+            "acertada": 'verdadera',
+            "respuestas": ['Falso']
+        }, {
+            "nombre": 'LAS HERRAMIENTAS O TECNICAS DE PROGRAMACION QUE MAS SE UTILIZAN Y QUE SE EMPLEAN PARA LA REPRESENTACION DE ALGORITMOS SON',
+            "puntaje": 30,
+            "acertada": 'Pseudocódigo y Diagramas de flujo',
+            "respuestas": ['Lenguaje C++ y Cobol', 'Análisis y Diagrama de flujo', 'Diagramas de Venn y Calculos']
+        }, {
+            "nombre": 'que es una constante',
+            "puntaje": 30,
+            "acertada": 'Constante es Un valor que está en la maquina',
+            "respuestas": ['Valor que se le asigna y no cambia durante la ejecución o proceso de solución del problema', 'Valor que varia durante toda ejecución']
         },
-        {
-            "question": "¿Quién es el mayor superheroe de todos los tiempos?",
-            "answers": ["Spiderman", "Batman", "Yo mismo", "Tú mismo"]
-        },
-        {
-            "question": "¿Por qué lo pájaros pían?",
-            "answers": ["Tienen hambre", "Tienen frío", "Están contentos", "Están tristes"]
-        }
     ];
-    const p = []
-    while (p.length < 3) {
-        var element = a[Math.floor(Math.random() * a.length)];
-        if ((p.includes(element) === false)) {
-            p.push(element)
-            element.answers = prueba(element.answers);
-            console.log(element.answers);
-        }
+
+    i = 0;
+    while (i < a.length) {
+        let preg = a[i]
+        nombre = preg.nombre
+        puntaje = preg.puntaje
+        acertada = preg.acertada
+        respuestas = preg.respuestas
+        const Npreg = Preg({ nombre, acertada, puntaje, respuestas })
+        await Npreg.save();
+        i++
     }
-    
-    res.render('prueba',{p})
+    res.send('lenado')
 }
 
 
+pregctrl.guardar = async (req, res) => {
+    const {id_prueba}= req.body
+    const data = JSON.parse(JSON.stringify(req.body));
+    let puntaje=0
+    respuestas=[]
+    for (let clave in data) {
+        // Controlando que json realmente tenga esa propiedad
+        if (data.hasOwnProperty(clave)) {
+            if (clave !== 'id_prueba') {
+                const pregunta = await Preg.findById(clave)
+                if (pregunta.acertada === data[clave]) {
+                    puntaje += pregunta.puntaje
+                }
+                pr={pregunta :clave,respuesta:data[clave]}
+                respuestas.push(pr)
+                // Mostrando en pantalla la clave junto a su valor
+                //console.log("id de pregunta " + clave + " y la respuesta " + data[clave]);
+            }
+        }
+    }
+    console.log(id_prueba);
+    await Resut.findByIdAndUpdate(id_prueba,{puntaje,respuestas})
+    res.send('respuesta')
+}
 
 
-const prueba = (item) => { 
-    item.sort(function(){ return Math.random()-0.5});
+pregctrl.rederIndex = (req, res) => {
+    res.render('index')
+}
+
+pregctrl.revolverNP = async (req, res) => {
+
+    puntaje=0
+    respuestas=[]
+    const{nombre,cedula,correo}=req.body
+    const Ncuestion=Resut({nombre,cedula,correo,puntaje,respuestas})
+    const Nc=await Ncuestion.save()
+    const a = await Preg.find().lean()
+    idNc= Nc._id
+    const p = []
+    cantidad = 2
+    while (p.length < cantidad) {
+        const element = a[Math.floor(Math.random() * a.length)];
+        if ((p.includes(element) === false)) {
+            p.push(element)
+            element.respuestas.push(element.acertada)
+            element.respuestas = prueba(element.respuestas);
+        }
+    }
+    console.log(idNc);
+    res.render('prueba', { p,idNc })
+}
+
+
+const prueba = (item) => {
+    item.sort(function () { return Math.random() - 0.5 });
     return item
 };
 /* https://pablomonteserin.com/res/diapos_theme/code-pen/index.php?url=/res//blog-material/trivial/index.html&queTiene=4 */
