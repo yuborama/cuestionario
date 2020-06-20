@@ -47,32 +47,33 @@ pregctrl.llenarbase = async (req, res) => {
     res.send('lenado')
 }
 
-
 pregctrl.guardar = async (req, res) => {
     const {id_prueba}= req.body
     const data = JSON.parse(JSON.stringify(req.body));
     let puntaje=0
     respuestas=[]
+    resultadop=[]
     for (let clave in data) {
         // Controlando que json realmente tenga esa propiedad
         if (data.hasOwnProperty(clave)) {
             if (clave !== 'id_prueba') {
                 const pregunta = await Preg.findById(clave)
                 if (pregunta.acertada === data[clave]) {
+                    Rr={pregunta:pregunta.nombre,respuesta:data[clave],acertada:true}
                     puntaje += pregunta.puntaje
+                }else{
+                    Rr={pregunta:pregunta.nombre,respuesta:data[clave],acertada:false}
                 }
                 pr={pregunta :clave,respuesta:data[clave]}
                 respuestas.push(pr)
-                // Mostrando en pantalla la clave junto a su valor
-                //console.log("id de pregunta " + clave + " y la respuesta " + data[clave]);
+                resultadop.push(Rr)
             }
         }
     }
-    console.log(id_prueba);
+    console.log(resultadop);
     await Resut.findByIdAndUpdate(id_prueba,{puntaje,respuestas})
-    res.send('respuesta')
+    res.render('resultado',{resultadop})
 }
-
 
 pregctrl.rederIndex = (req, res) => {
     res.render('index')

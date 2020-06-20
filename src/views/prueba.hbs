@@ -1,31 +1,177 @@
+<style>
+    body {
+        background: #333;
+        color: white;
+    }
+
+    .slider-container {
+        max-width: 1000px;
+        padding: 2rem 3rem;
+        background: #e6e6e6;
+        margin: 2rem auto 0 auto;
+        overflow: hidden;
+        border-radius: 5px;
+        position: relative;
+
+        &:before {
+            content: '.slider-container';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: blue;
+        }
+    }
+
+    img {
+        display: inline-block;
+        vertical-align: top;
+        max-width: 100%;
+    }
+
+    .my-slider {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .slider-item {
+        
+        background: grey;
+        border-right: 2px solid #333;
+        padding: 1.5rem .75rem;
+        position: relative;
+
+        &:before {
+            content: '.slider-item';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: blue;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .controls {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        position: absolute;
+        left: 0;
+        background: #333;
+        width: 100%;
+        top: 50%;
+        transform: translatey(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &:focus {
+            outline: none;
+        }
+
+        li:hover {
+            cursor: pointer;
+        }
+    }
+
+    .card {
+        text-align: center;
+        margin: 0 auto;
+        max-width: 300px;
+        color: #333;
+        background: white;
+        border-radius: 5px;
+        padding-bottom: .75rem;
+        font-family: sans-serif;
+        overflow: hidden;
+        box-shadow: 2px 2px rgba(black, .3);
+        position: relative;
+
+        &:before {
+            content: '.card';
+            position: absolute;
+            bottom: 0;
+            color: blue;
+        }
+
+        img {
+            margin-bottom: .25rem;
+        }
+
+        h2 {
+            margin: 0 0 .25rem;
+        }
+
+        p {
+            margin: 0;
+            padding: 0 .5rem;
+        }
+    }
+
+    .check {
+        display: flex;
+        align-items: center;
+    }
+    .top{
+        padding-top: 3em;
+    }
+</style>
 <div class="grid-container">
     <h1>prueba</h1>
-    <div class="grid-x grid-padding-x">
-        <form data-abide novalidate action='/prueba' method="POST">
-            
-            <input type="hidden" name="id_prueba" value="{{idNc}}">
-            <div class="grid-x grid-margin-x align-bottom ">
-                <div class="cell small-12">
-                    <h2>Preguntas:</h2>
-                </div>
-                {{#each p}}
-                <div class="cell small-12">
-                    {{nombre}}
-                </div>
-                <fieldset>
-                    <legend>Respuestas</legend>
-                    {{#each respuestas}}
-                    <div class="cell small-12">
-                        <input type="radio" name="{{../this._id}}" value="{{this}}" id="{{this}}" required><label
-                            for="{{this}}">{{this}}</label>
+    <div class="grid-x grid-padding-x align-center">
+        <div class="cell small-6 align-center">
+            <div class="grid-container">
+                <form data-abide novalidate action='/prueba' method="POST">
+                    <input type="hidden" name="id_prueba" value="{{idNc}}">
+                    <div class="grid-x grid-margin-x align-bottom ">
+                        <div class="cell small-12">
+                            <h2 style="padding-top: 0em;">Preguntas:</h2>
+                        </div>
+                        <div class="slider-container">
+                            <div class="my-slider">
+                                {{#each p}}
+                                <div class="slider-item">
+                                    <div class="card">
+
+                                        <div class="cell small-12">
+                                            {{nombre}}
+                                        </div>
+                                        <fieldset>
+                                            <legend>Respuestas</legend>
+                                            {{#each respuestas}}
+                                            <div class="cell small-12 check">
+                                                <input type="radio" name="{{../this._id}}" value="{{this}}"
+                                                    id="{{this}}" required><label for="{{this}}" class="middle">
+                                                    <p>{{this}}</p>
+                                                </label>
+                                            </div>
+                                            {{/each}}
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                {{/each}}
+                            </div>
+                            <ul class="controls" id="customize-controls" aria-label="Carousel Navigation" tabindex="0">
+                                <li class="prev" data-controls="prev" aria-controls="customize" tabindex="-1">
+                                    <div class="button">Back</div>
+                                </li>
+                                <li class="next" data-controls="next" aria-controls="customize" tabindex="-1">
+                                    <div class="button">Next</div>
+                                </li>
+                            </ul>
+                            <div class="cell small-12 top">
+                                <button class="button" type="submit">Terminar</button>
+                            </div>
+                        </div>
                     </div>
-                    {{/each}}
-                </fieldset>
-                {{/each}}
-                <div class="cell small-12">
-                    <button class="button" type="submit">Submit</button>
-                </div>
+
             </div>
-        </form>
+            </form>
+        </div>
     </div>
+
+</div>
 </div>

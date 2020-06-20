@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,13 +9,14 @@
     <link rel="stylesheet" href="/css/foundation.css">
     <!--my css-->
     <link rel="stylesheet" href="/css/mystyle.css">
-  
+    <!-- slider -->
+    <link rel="stylesheet" href="/css/tiny-css/prism.css">
+    <link rel="stylesheet" href="/css/tiny-css/tiny-slider.css">
+    <link rel="stylesheet" href="/css/tiny-css/styles.css">
 </head>
 
 <body>
     <!-- <div class="center"> -->
-    {{>errors}}
-    {{>messages}}
     {{{body}}}
     <!--</div> -->
     <!-- this will include every plugin and utility required by Foundation -->
@@ -22,6 +24,38 @@
     <script src="/js/vendor/jquery.js"></script>
     <script src="/js/vendor/what-input.js"></script>
     <script src="/js/vendor/foundation.js"></script>
+    <!--slider  -->
+    <script src="/js/tiny-js/prism.js"></script>
+    <script src="/js/tiny-js/tiny-slider.js"></script>
+    <!--/slider  -->
     <script src="/js/myscript.js"></script>
+<script>
+
+    const slider = tns({
+        container: '.my-slider',
+        loop: false,
+        items: 1,
+        slideBy: 'page',
+        nav: false,
+        autoplay: true,
+        speed: 400,
+        autoplayButtonOutput: false,
+        mouseDrag: false,
+        lazyload: true,
+        controlsContainer: "#customize-controls",
+        responsive: {
+            640: {
+                items: 2,
+            },
+
+            768: {
+                items: 1,
+            }
+        }
+
+    });
+</script>
+
 </body>
+
 </html>
